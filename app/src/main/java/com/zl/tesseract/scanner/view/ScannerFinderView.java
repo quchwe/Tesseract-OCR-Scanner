@@ -18,7 +18,7 @@ import com.zl.tesseract.scanner.utils.ScreenUtils;
 
 public final class ScannerFinderView extends RelativeLayout {
 
-    private static final int[] SCANNER_ALPHA = { 0, 64, 128, 192, 255, 192, 128, 64 };
+    private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
     private static final long ANIMATION_DELAY = 100L;
     private static final int OPAQUE = 0xFF;
 
@@ -137,6 +137,9 @@ public final class ScannerFinderView extends RelativeLayout {
     private void drawFocusRect(Canvas canvas, Rect rect) {
         // 绘制焦点框（黑色）
         mPaint.setColor(mFrameColor);
+        rect.top = 500;
+        rect.bottom = 650;
+
         // 上
         canvas.drawRect(rect.left + mAngleLength, rect.top, rect.right - mAngleLength, rect.top + mFocusThick, mPaint);
         // 左
@@ -165,6 +168,10 @@ public final class ScannerFinderView extends RelativeLayout {
         int top = rect.top;
         int right = rect.right;
         int bottom = rect.bottom;
+
+        top = 500 ;
+        bottom = 650;
+
         // 左上角
         canvas.drawRect(left, top, left + mAngleLength, top + mAngleThick, mPaint);
         canvas.drawRect(left, top, left + mAngleThick, top + mAngleLength, mPaint);
@@ -203,7 +210,7 @@ public final class ScannerFinderView extends RelativeLayout {
         mHandler.sendEmptyMessageDelayed(1, ANIMATION_DELAY);
     }
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -215,7 +222,7 @@ public final class ScannerFinderView extends RelativeLayout {
 
     private OnTouchListener getTouchListener() {
 
-        if (touchListener == null){
+        if (touchListener == null) {
             touchListener = new OnTouchListener() {
 
                 int lastX = -1;
@@ -235,31 +242,31 @@ public final class ScannerFinderView extends RelativeLayout {
                                 Rect rect = mFrameRect;
                                 final int BUFFER = 60;
                                 if (lastX >= 0) {
-                                    
+
                                     boolean currentXLeft = currentX >= rect.left - BUFFER && currentX <= rect.left + BUFFER;
                                     boolean currentXRight = currentX >= rect.right - BUFFER && currentX <= rect.right + BUFFER;
                                     boolean lastXLeft = lastX >= rect.left - BUFFER && lastX <= rect.left + BUFFER;
                                     boolean lastXRight = lastX >= rect.right - BUFFER && lastX <= rect.right + BUFFER;
-                                    
+
                                     boolean currentYTop = currentY <= rect.top + BUFFER && currentY >= rect.top - BUFFER;
                                     boolean currentYBottom = currentY <= rect.bottom + BUFFER && currentY >= rect.bottom - BUFFER;
                                     boolean lastYTop = lastY <= rect.top + BUFFER && lastY >= rect.top - BUFFER;
                                     boolean lastYBottom = lastY <= rect.bottom + BUFFER && lastY >= rect.bottom - BUFFER;
-                                    
+
                                     boolean XLeft = currentXLeft || lastXLeft;
                                     boolean XRight = currentXRight || lastXRight;
                                     boolean YTop = currentYTop || lastYTop;
                                     boolean YBottom = currentYBottom || lastYBottom;
-                                    
+
                                     boolean YTopBottom = (currentY <= rect.bottom && currentY >= rect.top)
                                             || (lastY <= rect.bottom && lastY >= rect.top);
 
                                     boolean XLeftRight = (currentX <= rect.right && currentX >= rect.left)
                                             || (lastX <= rect.right && lastX >= rect.left);
-                                            
-                                        //右上角
-                                    if (XLeft && YTop) { 
-                                        updateBoxRect(2 * (lastX - currentX), (lastY - currentY), true); 
+
+                                    //右上角
+                                    if (XLeft && YTop) {
+                                        updateBoxRect(2 * (lastX - currentX), (lastY - currentY), true);
                                         //左上角
                                     } else if (XRight && YTop) {
                                         updateBoxRect(2 * (currentX - lastX), (lastY - currentY), true);
@@ -270,13 +277,13 @@ public final class ScannerFinderView extends RelativeLayout {
                                     } else if (XRight && YBottom) {
                                         updateBoxRect(2 * (currentX - lastX), (currentY - lastY), false);
                                         //左侧
-                                    } else if (XLeft && YTopBottom) { 
+                                    } else if (XLeft && YTopBottom) {
                                         updateBoxRect(2 * (lastX - currentX), 0, false);
                                         //右侧
-                                    } else if (XRight && YTopBottom) { 
+                                    } else if (XRight && YTopBottom) {
                                         updateBoxRect(2 * (currentX - lastX), 0, false);
                                         //上方
-                                    } else if (YTop && XLeftRight) { 
+                                    } else if (YTop && XLeftRight) {
                                         updateBoxRect(0, (lastY - currentY), true);
                                         //下方
                                     } else if (YBottom && XLeftRight) {
@@ -294,12 +301,12 @@ public final class ScannerFinderView extends RelativeLayout {
                             //移除之前的刷新
                             mHandler.removeMessages(1);
                             //松手时对外更新
-                            mRect = mFrameRect; 
+                            mRect = mFrameRect;
                             lastX = -1;
                             lastY = -1;
                             return true;
                         default:
-                            
+
                     }
                     return false;
                 }
@@ -320,22 +327,22 @@ public final class ScannerFinderView extends RelativeLayout {
 
         int leftOffset = (ScrRes.x - newWidth) / 2;
 
-        if (isUpward){
+        if (isUpward) {
             this.top -= dH;
         }
 
         int topOffset = this.top;
 
-        if (topOffset < MIN_FOCUS_BOX_TOP){
+        if (topOffset < MIN_FOCUS_BOX_TOP) {
             this.top = MIN_FOCUS_BOX_TOP;
             return;
         }
 
-        if (topOffset + newHeight > MIN_FOCUS_BOX_TOP + ScrRes.x){
+        if (topOffset + newHeight > MIN_FOCUS_BOX_TOP + ScrRes.x) {
             return;
         }
 
-        if (newWidth < MIN_FOCUS_BOX_WIDTH || newHeight < MIN_FOCUS_BOX_HEIGHT){
+        if (newWidth < MIN_FOCUS_BOX_WIDTH || newHeight < MIN_FOCUS_BOX_HEIGHT) {
             return;
         }
 
